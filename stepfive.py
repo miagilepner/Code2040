@@ -7,8 +7,9 @@ r = requests.post("http://challenge.code2040.org/api/dating", json=payload)
 jsonresp = r.json()
 datestamp = jsonresp["datestamp"]
 interval = jsonresp["interval"]
-date=datetime.strptime(datestamp, "%Y-%m-%dT%H:%M:%S.%f%z") 
-date = date+datetime.timedelta(seconds=interval)
-payload.update({"datestamp":date.isoformat()})
+datestamp = datestamp.strip("Z")
+date=datetime.strptime(datestamp, "%Y-%m-%dT%H:%M:%S")
+date = date+timedelta(seconds=interval)
+payload.update({"datestamp":date.isoformat()+"Z"})
 re = requests.post("http://challenge.code2040.org/api/dating/validate", json=payload)
 print re.text
